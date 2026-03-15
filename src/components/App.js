@@ -1,42 +1,63 @@
-import React, { Component, useState } from "react";
-import '../styles/App.css';
+import React, { Component } from "react";
+import "../styles/App.css";
 
 class App extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            renderBall: false,
-            posi : 0,
-            ballPosition: { left: "0px" }
-        };
-        this.renderChoice = this.renderBallOrButton.bind(this)
-        this.buttonClickHandler = this.buttonClickHandler.bind(this)
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderBall: false,
+      posi: 0,
+      ballPosition: { left: "0px", position: "relative" }
     };
 
-    buttonClickHandler() {
-   
-   }
-    renderBallOrButton() {
-		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
-		} else {
-		    return <button onClick={this.buttonClickHandler} >Start</button>
-		}
-    }
+    this.renderChoice = this.renderBallOrButton.bind(this);
+    this.buttonClickHandler = this.buttonClickHandler.bind(this);
+  }
 
-    // bind ArrowRight keydown event
-    componentDidMount() {
-      
-    }
+  buttonClickHandler() {
+    this.setState({
+      renderBall: true
+    });
+  }
 
-    render() {
-        return (
-            <div className="playground">
-                {this.renderBallOrButton()}
-            </div>
-        )
+  renderBallOrButton() {
+    if (this.state.renderBall) {
+      return (
+        <div className="ball" style={this.state.ballPosition}></div>
+      );
+    } else {
+      return (
+        <button className="start" onClick={this.buttonClickHandler}>
+          Start
+        </button>
+      );
     }
+  }
+
+  // bind ArrowRight keydown event
+  componentDidMount() {
+    window.addEventListener("keydown", (event) => {
+      if (event.keyCode === 39 && this.state.renderBall) {
+        const newPosition = this.state.posi + 5;
+
+        this.setState({
+          posi: newPosition,
+          ballPosition: {
+            left: newPosition + "px",
+            position: "relative"
+          }
+        });
+      }
+    });
+  }
+
+  render() {
+    return (
+      <div className="playground">
+        {this.renderBallOrButton()}
+      </div>
+    );
+  }
 }
-
 
 export default App;
